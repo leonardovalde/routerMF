@@ -4,8 +4,7 @@ const Dotenv = require('dotenv-webpack')
 const deps = require('./package.json').dependencies
 module.exports = (_, argv) => ({
   output: {
-    // publicPath: 'https://routermfhost.onrender.com/',
-    publicPath: 'http://localhost:3000/',
+    publicPath: 'http://localhost:3002/',
   },
 
   resolve: {
@@ -13,16 +12,12 @@ module.exports = (_, argv) => ({
   },
 
   devServer: {
-    port: 3000,
+    port: 3002,
     historyApiFallback: true,
   },
 
   module: {
     rules: [
-      {
-        test: /\.(png|jpe?g|gif|svg)$/i,
-        type: 'asset/resource',
-      },
       {
         test: /\.m?js/,
         type: 'javascript/auto',
@@ -46,14 +41,12 @@ module.exports = (_, argv) => ({
 
   plugins: [
     new ModuleFederationPlugin({
-      name: 'host',
+      name: 'Counter',
       filename: 'remoteEntry.js',
-      remotes: {
-        // NavBarComponent: 'navbar@https://routermf.onrender.com/remoteEntry.js',
-        NavBarComponent: 'navbar@http://localhost:3001/remoteEntry.js',
-        CounterComponent: 'Counter@http://localhost:3002/remoteEntry.js',
+      remotes: {},
+      exposes: {
+        './Counter': './src/components/Counter.tsx',
       },
-      exposes: {},
       shared: {
         ...deps,
         react: {
